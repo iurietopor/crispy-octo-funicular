@@ -1,0 +1,4 @@
+# .gitignore file
+
+# folders
+**/__pycache__/*
