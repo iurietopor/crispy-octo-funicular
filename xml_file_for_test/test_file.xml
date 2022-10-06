@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcampaign version="9/27/2022 - 12:33:58 PM">
+  <testcase id="tc671577" name="Y2038 CARI_Implement " tcAttribute="WaveX_SSW_Test_level - Smoke Test;WaveX_SSW_Test_level - L Test;WaveX_SSW_Test_level - M Test;WaveX_SSW_automation - implemented;WAVE X project applicable - WAVE2.30;WaveX_SSW_Node - SOC;WaveX_SSW_Test_Type - Verification;WAVE X project applicable - Wave4.4;WaveX_SSW_Area - Security_Overall;WaveX_SSW_Test_level - Milestone Test;" description="For &quot;Step 12&quot;: &#xD;&#xA;    * powershell -c &quot;echo TimeStamp:$(Get-Date -UFormat %s)&quot;&#xD;&#xA;    * powershell -c &quot;echo TimeStamp:$(Get-Date -Date]&quot;2037-07-20T21:18:05&quot; -UFormat %s)&quot; &#xD;&#xA;    ** NOTE! &quot;For second value yuo can specify any value of DateTime what you want.&quot;&#xD;&#xA;&#xD;&#xA;This test check Implementation for CARI:&#xD;&#xA;Was added a Delay for Date_setup, because the Date and Time are synced in follow oreder:&#xD;&#xA;1. Year; 2. Month; 3. Day; 4. Hour; 5. Minutes. (Seconds are ignored).&#xD;&#xA;This realization are a root cause for NAC reboot (for solution activation) then nac receive " csv_file_path="" recovery_fct_lib="" recovery_fct_name="" clean_recovery_fct_lib="" clean_recovery_fct_name="" rqm_id="" more_attempts="False" blocked="False" loopIterative="False">
+
+    <teststep is_blocking="True" is_mandatory="True" desc="SLEEP (2.0)">
+      <function_library>CoreFunctions.dll</function_library>
+      <function_name>Sleep</function_name>
+      <function_parameters>
+        <param name="seconds">2.0</param>
+      </function_parameters>
+      <function_expected />
+      <function_returned />
+    </teststep>
+    <teststep is_blocking="True" is_mandatory="True" desc="Login as root" color="-8323200">
+      <function_library>SerialFunctions.dll</function_library>
+      <function_name>SendSerial</function_name>
+      <function_parameters>
+        <param name="message">root</param>
+        <param name="port">SOC</param>
+      </function_parameters>
+      <function_expected />
+      <function_returned />
+    </teststep>
+    <teststep is_blocking="True" is_mandatory="True" desc="SLEEP (1.0)" color="-3211599">
+      <function_library>CoreFunctions.dll</function_library>
+      <function_name>Sleep</function_name>
+      <function_parameters>
+        <param name="seconds">1.0</param>
+      </function_parameters>
+      <function_expected />
+      <function_returned />
+    </teststep>
+    <teststep is_blocking="True" is_mandatory="True" desc="Send RW command" color="-3211599">
+      <function_library>SerialFunctions.dll</function_library>
+      <function_name>SendSerial</function_name>
+      <function_parameters>
+        <param name="message">mount -o remount, rw /</param>
+        <param name="port">SOC</param>
+      </function_parameters>
+      <function_expected />
+      <function_returned />
+    </teststep>
+    <teststep is_blocking="True" is_mandatory="True" desc="Exclude SP (space padding) from the values of the variables" color="-2424903">
+      <function_library>SerialFunctions.dll</function_library>
+      <function_name>SendAndWaitOnSerial</function_name>
+      <function_parameters>
+        <param name="failAction">continue</param>
+        <param name="message">echo Without_Space_Padding: $(date -d @$((#current_date_time#-883612800)) "+%m %H %M %S")</param>
+        <param name="ordered">false</param>
+        <param name="port">SOC</param>
+        <param name="waitTime">8</param>
+      </function_parameters>
+      <function_expected>
+        <expect reg_exp="True">Without_Space_Padding:\s+(\d\d)\s+(\d\d)\s+(\d\d)\s+(\d\d)</expect>
+      </function_expected>
+      <function_returned>
+        <return var_name="Month" matching_group="1" is_global_var="False">Without_Space_Padding:\s+(\d\d)</return>
+        <return var_name="Hour" matching_group="2" is_global_var="False">Without_Space_Padding:\s+(\d\d)\s+(\d\d)</return>
+        <return var_name="Minutes" matching_group="3" is_global_var="False">Without_Space_Padding:\s+(\d\d)\s+(\d\d)\s+(\d\d)</return>
+        <return var_name="Seconds" matching_group="4" is_global_var="False">Without_Space_Padding:\s+(\d\d)\s+(\d\d)\s+(\d\d)\s+(\d\d)</return>
+      </function_returned>
+    </teststep>
+  </testcase>
+
+</testcampaign>

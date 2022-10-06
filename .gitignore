@@ -2,3 +2,7 @@
 
 # folders
 **/__pycache__/*
+**/.vscode/*
+
+# files
+*_old_*
